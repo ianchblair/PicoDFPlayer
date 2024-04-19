@@ -6,7 +6,6 @@
 
 from machine import UART, Pin
 from utime import sleep_ms, sleep
-import uasyncio as asyncio 
 
 #Constants
 
@@ -47,11 +46,10 @@ class DFPlayer():
 
         self.uart.write(toSend)
         if (_isAck):
-            if (_useAyncio):
-                await asyncio.sleep_ms(self.COMMAND_LATENCY)
-            else:
-                utime.sleep_ms(self.COMMAND_LATENCY)
-        return self.uart.read()
+            sleep_ms(self.COMMAND_LATENCY)
+            return self.uart.read()
+        else:
+            return 0
 
     def queryBusy(self):
         return not self.playerBusy.value()
